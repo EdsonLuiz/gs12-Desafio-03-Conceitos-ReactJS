@@ -14,8 +14,8 @@ function App() {
 
   async function handleAddRepository() {
     const response = await api.post("repositories", {
-      url: "https://github.com/Rocketseat/umbriel",
-      title: "Umbriel",
+      url: `https://github.com/Rocketseat/name${Date.now()}`,
+      title: `name${Date.now()}`,
       techs: ["Node", "Express", "TypeScript"],
     });
 
@@ -24,14 +24,19 @@ function App() {
   }
 
   async function handleRemoveRepository(id) {
-    // TODO
+    let tempRepositories = repositories.filter(
+      (repository) => repository.id !== id
+    );
+    await api.delete(`repositories/${id}`);
+
+    setRepositories(tempRepositories);
   }
 
   return (
     <div>
       <ul data-testid="repository-list">
         {repositories.map((repository) => (
-          <li>
+          <li key={repository.id}>
             {repository.title}
             <button onClick={() => handleRemoveRepository(repository.id)}>
               Remover
